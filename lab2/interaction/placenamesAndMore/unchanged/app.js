@@ -2,15 +2,16 @@ var allFunctions = function () {
   "use strict";
 
   console.log("entering all functions");
-
   var createTableFromJsonResponse = function (data) {
-    console.log("createTableFromJsonResponse called");
     document.querySelector("main .forDebug").append(JSON.stringify(data));
-  
-    if (typeof data.postalcodes !== "undefined" && data.postalcodes.length > 0) {
-      data.postalcodes.forEach(function (item, index) {
-        console.log("Appending row for item index:", index);
+
+    if (
+      typeof data.postalcodes !== "undefined" &&
+      data.postalcodes.length > 0
+    ) {
+      data.postalcodes.forEach(function (item) {
         var row = document.createElement("tr");
+        row.style.display = "none";
         row.innerHTML =
           '<td data-col="placeName">' +
           item.placeName +
@@ -24,17 +25,12 @@ var allFunctions = function () {
           '<td><input type="button" class="theButton1" value="Get WMS map"></td>' +
           '<td><input type="button" class="theButton2" value="Find nearest Intersection"></td>';
         document.querySelector("#resultsTable").append(row);
+        row.style.display = "table-row";
       });
     } else {
       document.querySelector("main .messages").append("no results found");
     }
   };
-  
-  // document.querySelector("section#geonames button").addEventListener("click", function (event) {
-  //   console.log("Search button clicked");
-  //   searchFromInput();
-  // });
-  
 
   var getPlacenames_plain_javascript = function (
     postalcodeInput,
@@ -109,7 +105,6 @@ var allFunctions = function () {
     request.open("GET", requestUrl, true);
     request.onload = function () {
       if (this.status >= 200 && this.status < 400) {
-        document.querySelector("main .forDebug2").innerHTML = ""; /// ADDED LINE
         var textarea = document.createElement("textarea");
         textarea.rows = "20";
         textarea.cols = "60";
@@ -132,9 +127,6 @@ var allFunctions = function () {
   };
 
   var handleXMLResponse = function (data) {
-    document.querySelector("main .messages2").innerHTML = ""; /// ADDED LINE
-    document.querySelector("#xmlDataAsTable").innerHTML = ""; /// ADDED LINE
-
     var feature = data.getElementsByTagName("intersection")[0];
     if (typeof feature !== "undefined" && feature.childNodes.length > 0) {
       var headerRow = document.createElement("tr");
@@ -163,14 +155,11 @@ var allFunctions = function () {
   };
 
   var getAndDisplayMap = function (wms_request) {
-    document.querySelector("main .mapDiv").innerHTML = ""; /// ADDED LINE
     var img = document.createElement("img");
     img.style.display = "none";
     img.src = wms_request;
     document.querySelector("main .mapDiv").append(img);
-    img.onload = function() { /// ADDED LINE
-        img.style.display = "block";
-    };
+    img.style.display = "block";
   };
 
   var constructWMSrequest = function (
@@ -302,27 +291,27 @@ var allFunctions = function () {
           break;
         }
       }
-      
+
       // let lat = 0
       // let lng = 0
       requestWMSmap(lat, lng);
     }
   });
 
-  // document
-  //   .querySelector("section#geonames button")
-  //   .addEventListener("click", function (event) {
-  //     searchFromInput();
-  //   });
+  document
+    .querySelector("section#geonames button")
+    .addEventListener("click", function (event) {
+      searchFromInput();
+    });
 
-//   document
-//     .querySelector("section#geonames input")
-//     .addEventListener("keypress", function (event) {
-//       // 13 = the enter key
-//       if (event.keyCode === 13) {
-//         searchFromInput();
-//       }
-//     });
+  document
+    .querySelector("section#geonames input")
+    .addEventListener("keypress", function (event) {
+      // 13 = the enter key
+      if (event.keyCode === 13) {
+        searchFromInput();
+      }
+    });
 };
 
 document.addEventListener("DOMContentLoaded", allFunctions);

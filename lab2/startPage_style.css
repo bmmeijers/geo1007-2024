@@ -1,0 +1,40 @@
+body {
+    background: #a6a6a6;
+  }
+
+  ol {
+    border: 2px solid #000; /* Sets a black border with a thickness of 2 pixels */
+    border-radius: 8px;
+    padding: 20px; /* Adds space between the border and the list items */
+    margin-top: 20px; /* Adds space above the list */
+    margin-bottom: 20px; /* Adds space below the list */
+  }
+
+  .font1{
+    font-family: 'Arial', sans-serif;
+  }
+
+  .font2{
+    font-family: 'Times New Roman', serif;
+  }
+
+  .fatBorder{
+    border: 5px solid #000;
+  }
+
+a:hover {
+  color: #3498db; /* Changes the color to a blue when the mouse hovers over it */
+  text-decoration: underline; /* Adds an underline to highlight it further */
+}
+
+h1, h2 {
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+}
+
+a {
+  transition: color 0.3s ease-in-out, text-decoration-color 0.3s ease-in-out;
+}
+
+
+
+
