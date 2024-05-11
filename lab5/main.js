@@ -65,29 +65,33 @@ function register_geocoder(mapInstance) {
 register_geocoder(map);
 
 function registerGeoLocate(mapInstance) {
-    mapInstance.locate({ setView: true, maxZoom: 16 });
+    // Request the device's location
+    mapInstance.locate({ setView: true, maxZoom: 16, watch: true });
 
+    // Event handler for when location is found
     function onLocationFound(e) {
-        var radius = e.accuracy;
+        var radius = e.accuracy / 2; // Get accuracy radius, divide by 2 for diameter
 
-        let m = L.marker(e.latlng).addTo(map)
+        let marker = L.marker(e.latlng).addTo(mapInstance)
             .bindPopup("You are within " + radius.toFixed(1) + " meters from this point").openPopup();
 
-        let c = L.circle(e.latlng, radius).addTo(map);
+        let circle = L.circle(e.latlng, { radius: radius }).addTo(mapInstance);
 
+        // Optional: remove location marker and circle after 25 seconds
         setTimeout(function () {
-            mapInstance.removeLayer(m);
-            mapInstance.removeLayer(c);
-        },
-            25000);
+            mapInstance.removeLayer(marker);
+            mapInstance.removeLayer(circle);
+        }, 25000);
+    }
+
+    // Event handler for location errors (e.g., user denies geolocation)
+    function onLocationError(e) {
+        alert("Location access denied: " + e.message);
     }
 
     mapInstance.on('locationfound', onLocationFound);
-
-    function onLocationError(e) {
-        alert(e.message);
-    }
-
     mapInstance.on('locationerror', onLocationError);
 }
-registerGeoLocate(map)
+
+// Initialize the geolocation request when the map is ready
+registerGeoLocate(map);
